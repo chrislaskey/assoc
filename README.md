@@ -1,5 +1,7 @@
 # Assoc
 
+[![Build Status](https://travis-ci.com/chrislaskey/assoc.svg?branch=master)](https://travis-ci.com/chrislaskey/assoc)
+
 > Tired of writing custom boilerplate to manage database associations in ecto?
 
 Ecto is an incredibly powerful toolkit, and it's flexible enough to fit all kinds of database designs. That flexibility also means you sometimes end up writing a lot of code to accomplish a simple pattern.
@@ -7,6 +9,14 @@ Ecto is an incredibly powerful toolkit, and it's flexible enough to fit all kind
 Assoc simplifies the code needed to manage common Ecto associations without the custom code and boilerplate. Drop in a `use` statement and define which associations are updatable. It's that easy.
 
 ## Quickstart
+
+Add to `mix.exs`:
+
+```elixir
+defp deps do
+  [{:assoc, "~> 0.1"}]
+end
+```
 
 In the schema file, include `Assoc.Schema` and define which associations can be updated:
 
