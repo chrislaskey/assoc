@@ -25,6 +25,5 @@ defmodule Assoc.Test.User do
     struct
     |> cast(params, [:email, :name])
     |> validate_required([:email])
-    |> unique_constraint(:email)
   end
 end
