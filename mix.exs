@@ -14,14 +14,16 @@ defmodule Assoc.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      description: description(),
+      package: package(),
 
-    	# Docs
-    	name: "Assoc",
-    	source_url: "https://github.com/chrislaskey/assoc",
-    	docs: [
-      	main: "Assoc",
-      	extras: ["README.md"]
-    	]
+      # Docs
+      name: "Assoc",
+      source_url: "https://github.com/chrislaskey/assoc",
+      docs: [
+        main: "Assoc",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -52,6 +54,21 @@ defmodule Assoc.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
+  end
+
+  defp description do
+    """
+    An easy way to manage many_to_many, has_many and belongs_to Ecto associations
+    """
+  end
+
+  defp package() do
+    [
+      files: ~w(lib priv .formatter.exs mix.exs README* readme* LICENSE*
+                license* CHANGELOG* changelog* src),
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/chrislaskey/assoc"}
     ]
   end
 end
