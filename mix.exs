@@ -58,9 +58,7 @@ defmodule Assoc.MixProject do
   end
 
   defp description do
-    """
-    An easy way to manage many_to_many, has_many and belongs_to Ecto associations
-    """
+    "An easy way to manage many_to_many, has_many and belongs_to Ecto associations"
   end
 
   defp package() do
