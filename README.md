@@ -6,6 +6,8 @@ Ecto is an incredibly powerful toolkit, and it's flexible enough to fit all kind
 
 Assoc simplifies the code needed to manage common Ecto associations without the custom code and boilerplate. Drop in a `use` statement and define which associations are updatable. It's that easy.
 
+[![Build Status](https://travis-ci.com/chrislaskey/assoc.svg?branch=master)](https://travis-ci.com/chrislaskey/assoc)
+
 ## Quickstart
 
 In the schema file, include `Assoc.Schema` and define which associations can be updated:
