@@ -1,7 +1,7 @@
 defmodule Assoc.MixProject do
   use Mix.Project
 
-  @version "0.1.1"
+  @version "0.1.2"
 
   def project do
     [
@@ -23,8 +23,11 @@ defmodule Assoc.MixProject do
       name: "Assoc",
       source_url: "https://github.com/chrislaskey/assoc",
       docs: [
-        main: "Assoc",
-        extras: ["README.md"]
+        main: "readme",
+        extras: [
+          "README.md",
+          "CHANGELOG.md"
+        ]
       ]
     ]
   end
@@ -65,7 +68,6 @@ defmodule Assoc.MixProject do
 
   defp package() do
     [
-      main: "readme",
       files: ~w(lib priv .formatter.exs mix.exs README* LICENSE* CHANGELOG*),
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/chrislaskey/assoc"}
