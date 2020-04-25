@@ -41,10 +41,6 @@ defmodule Assoc.Updater do
 
   """
 
-  defmodule AssociationError do
-    defexception message: "Error creating association"
-  end
-
   @doc """
   Create and update associated records.
   """
@@ -52,13 +48,14 @@ defmodule Assoc.Updater do
   def update_associations(repo, {:ok, parent}, params), do: update_associations(repo, parent, params)
   def update_associations(repo, %schema{} = parent, params) do
     associations = Enum.reduce(schema.updatable_associations, %{}, fn ({association_key, association_schema}, acc) ->
-      association_params = params
+      association_params =
+        params
         |> Assoc.Util.keys_to_atoms()
         |> Map.get(association_key, :omitted)
 
       case update_association(repo, parent, association_schema, association_params) do
         {:skipped, _} -> acc
-        {:error, error} -> raise(AssociationError, error)
+        {:error, error} -> Map.put(acc, association_key, error)
         {:ok, result} -> Map.put(acc, association_key, result)
       end
     end)
@@ -66,9 +63,6 @@ defmodule Assoc.Updater do
     parent
     |> schema.associations_changeset(associations)
     |> repo.update
-  rescue
-    error in AssociationError -> {:error, error.message}
-    error -> raise error
   end
   def update_associations(_, value, _), do: value
 
@@ -78,31 +72,32 @@ defmodule Assoc.Updater do
   defp update_association(repo, parent, schema, params) when is_list(params) do
     results = Enum.map(params, fn (record_params) ->
       case create_or_update(repo, parent, schema, record_params) do
-        {:error, error} -> raise(AssociationError, error)
+        {:error, error} -> throw(error)
         {:ok, result} -> result
       end
     end)
 
     {:ok, results}
-  rescue
-    error in AssociationError -> {:error, error.message}
+  catch
+    %Ecto.Changeset{} = error -> {:error, error}
     error -> raise error
   end
   defp update_association(repo, parent, schema, params) do
     result = case create_or_update(repo, parent, schema, params) do
-      {:error, error} -> raise(AssociationError, error)
+      {:error, error} -> throw(error)
       {:ok, result} -> result
     end
 
     {:ok, result}
-  rescue
-    error in AssociationError -> {:error, error.message}
+  catch
+    %Ecto.Changeset{} = error -> {:error, error}
     error -> raise error
   end
 
   # Create or update associated record.
   defp create_or_update(repo, parent, schema, params) do
-    params = params
+    params =
+      params
       |> add_parent_to_params(parent)
       |> add_association_ids_to_params
 
