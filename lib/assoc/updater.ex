@@ -79,7 +79,7 @@ defmodule Assoc.Updater do
 
     {:ok, results}
   catch
-    %Ecto.Changeset{} = error -> {:error, error}
+    %{} = error -> {:error, error}
     error -> raise error
   end
   defp update_association(repo, parent, schema, params) do
@@ -90,7 +90,7 @@ defmodule Assoc.Updater do
 
     {:ok, result}
   catch
-    %Ecto.Changeset{} = error -> {:error, error}
+    %{} = error -> {:error, error}
     error -> raise error
   end
 
