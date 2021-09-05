@@ -77,7 +77,7 @@ defmodule Assoc.Schema do
         params = include_existing_associations(struct, params)
 
         struct
-        |> cast(params, [])
+        |> Ecto.Changeset.cast(params, [])
         |> put_associations(updatable_associations(), params)
       end
 
@@ -109,7 +109,7 @@ defmodule Assoc.Schema do
 
           case value do
             :omitted -> acc
-            value -> put_assoc(acc, key, value)
+            value -> Ecto.Changeset.put_assoc(acc, key, value)
           end
         end)
       end
