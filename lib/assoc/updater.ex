@@ -44,49 +44,59 @@ defmodule Assoc.Updater do
   @doc """
   Create and update associated records.
   """
-  @spec update_associations(map(), struct() | {:ok, struct()}, map()) :: {:ok, Map.t} | {:error, String.t}
-  def update_associations(repo, {:ok, parent}, params), do: update_associations(repo, parent, params)
-  def update_associations(repo, %schema{} = parent, params) do
-    associations = Enum.reduce(schema.updatable_associations, %{}, fn ({association_key, association_schema}, acc) ->
-      association_params =
-        params
-        |> Assoc.Util.keys_to_atoms()
-        |> Map.get(association_key, :omitted)
+  @spec update_associations(map(), struct() | {:ok, struct()}, map()) ::
+          {:ok, Map.t()} | {:error, String.t()}
+  def update_associations(repo, {:ok, parent}, params),
+    do: update_associations(repo, parent, params)
 
-      case update_association(repo, parent, association_schema, association_params) do
-        {:skipped, _} -> acc
-        {:error, error} -> Map.put(acc, association_key, error)
-        {:ok, result} -> Map.put(acc, association_key, result)
-      end
-    end)
+  def update_associations(repo, schema = %{} = parent, params) do
+    associations =
+      Enum.reduce(schema.updatable_associations, %{}, fn {association_key, association_schema},
+                                                         acc ->
+        association_params =
+          params
+          |> Assoc.Util.keys_to_atoms()
+          |> Map.get(association_key, :omitted)
+
+        case update_association(repo, parent, association_schema, association_params) do
+          {:skipped, _} -> acc
+          {:error, error} -> Map.put(acc, association_key, error)
+          {:ok, result} -> Map.put(acc, association_key, result)
+        end
+      end)
 
     parent
     |> schema.associations_changeset(associations)
     |> repo.update
   end
+
   def update_associations(_, value, _), do: value
 
   # Create or update records for a specific association.
   defp update_association(_repo, _parent, _schema, nil), do: {:ok, nil}
   defp update_association(_repo, _parent, schema, :omitted), do: {:skipped, schema}
+
   defp update_association(repo, parent, schema, params) when is_list(params) do
-    results = Enum.map(params, fn (record_params) ->
-      case create_or_update(repo, parent, schema, record_params) do
-        {:error, error} -> throw(error)
-        {:ok, result} -> result
-      end
-    end)
+    results =
+      Enum.map(params, fn record_params ->
+        case create_or_update(repo, parent, schema, record_params) do
+          {:error, error} -> throw(error)
+          {:ok, result} -> result
+        end
+      end)
 
     {:ok, results}
   catch
     %{} = error -> {:error, error}
     error -> raise error
   end
+
   defp update_association(repo, parent, schema, params) do
-    result = case create_or_update(repo, parent, schema, params) do
-      {:error, error} -> throw(error)
-      {:ok, result} -> result
-    end
+    result =
+      case create_or_update(repo, parent, schema, params) do
+        {:error, error} -> throw(error)
+        {:ok, result} -> result
+      end
 
     {:ok, result}
   catch
@@ -106,6 +116,7 @@ defmodule Assoc.Updater do
         schema.__struct__
         |> schema.changeset(params)
         |> repo.insert()
+
       id ->
         schema
         |> repo.get(id)
@@ -123,9 +134,12 @@ defmodule Assoc.Updater do
   # Returns:
   #
   #   %{role_id: 5, user_group: %UserGroup{id: 3}, user_group_id: 3}
-  defp add_parent_to_params(%_struct{} = params, parent), do: add_parent_to_params(Map.from_struct(params), parent)
+  defp add_parent_to_params(%_struct{} = params, parent),
+    do: add_parent_to_params(Map.from_struct(params), parent)
+
   defp add_parent_to_params(params, parent) do
-    name = parent.__struct__
+    name =
+      parent.__struct__
       |> Atom.to_string()
       |> String.split(".")
       |> List.last()
@@ -158,7 +172,7 @@ defmodule Assoc.Updater do
   #     user_role: %{name: "user role"}
   #   }
   defp add_association_ids_to_params(params) do
-    Enum.reduce(params, params, fn ({key, value}, acc) ->
+    Enum.reduce(params, params, fn {key, value}, acc ->
       case is_map(value) && Map.get(value, :id, false) do
         false -> acc
         id -> Map.put(acc, String.to_atom("#{key}_id"), id)
@@ -170,7 +184,8 @@ defmodule Assoc.Updater do
     quote do
       import Assoc.Updater
 
-      @spec update_associations(struct() | {:ok, struct()}, map()) :: {:ok, Map.t} | {:error, String.t}
+      @spec update_associations(struct() | {:ok, struct()}, map()) ::
+              {:ok, Map.t()} | {:error, String.t()}
       def update_associations(parent, params) do
         update_associations(unquote(repo), parent, params)
       end

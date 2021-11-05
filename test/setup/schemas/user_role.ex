@@ -2,9 +2,9 @@ defmodule Assoc.Test.UserRole do
   use Assoc.Test.Schema
 
   schema "user_roles" do
-    belongs_to :created_by, Assoc.Test.User, foreign_key: :created_by_id, on_replace: :delete
-    belongs_to :role, Assoc.Test.Role, on_replace: :delete
-    belongs_to :user, Assoc.Test.User, on_replace: :delete
+    belongs_to(:created_by, Assoc.Test.User, foreign_key: :created_by_id, on_replace: :delete)
+    belongs_to(:role, Assoc.Test.Role, on_replace: :delete)
+    belongs_to(:user, Assoc.Test.User, on_replace: :delete)
 
     timestamps()
   end
