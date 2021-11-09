@@ -49,7 +49,7 @@ defmodule Assoc.Updater do
   def update_associations(repo, {:ok, parent}, params),
     do: update_associations(repo, parent, params)
 
-  def update_associations(repo, schema = %{} = parent, params) do
+  def update_associations(repo, %schema{} = parent, params) do
     associations =
       Enum.reduce(schema.updatable_associations, %{}, fn {association_key, association_schema},
                                                          acc ->
