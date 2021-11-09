@@ -8,7 +8,7 @@ defmodule Assoc.Util do
 
   Options:
 
-    `:whitelist` -> List of strings to convert to atoms. When passed, only strings in whitelist will be converted.
+    `:allowlist` -> List of strings to convert to atoms. When passed, only strings in allowlist will be converted.
 
   Example:
 
@@ -29,12 +29,12 @@ defmodule Assoc.Util do
             key
 
           true ->
-            case Keyword.get(options, :whitelist) do
+            case Keyword.get(options, :allowlist) do
               nil ->
                 String.to_atom(key)
 
-              whitelist ->
-                case Enum.member?(whitelist, key) do
+              allowlist ->
+                case Enum.member?(allowlist, key) do
                   false -> key
                   true -> String.to_atom(key)
                 end
