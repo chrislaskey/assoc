@@ -3,16 +3,17 @@ defmodule Assoc.Test.Address do
   use Assoc.Schema, repo: Assoc.Test.Repo
 
   schema "addresses" do
-    field :address, :string
+    field(:address, :string)
 
-    belongs_to :user, Assoc.Test.User, on_replace: :update
+    belongs_to(:user, Assoc.Test.User, on_replace: :update)
 
     timestamps()
   end
 
-  def updatable_associations, do: [
-    user: Assoc.Test.User
-  ]
+  def updatable_associations,
+    do: [
+      user: Assoc.Test.User
+    ]
 
   def changeset(struct, params \\ %{}) do
     struct

@@ -20,21 +20,30 @@ defmodule Assoc.Util do
   """
   def keys_to_atoms(map, options \\ [])
   def keys_to_atoms(%_{} = struct, _), do: struct
+
   def keys_to_atoms(map, options) when is_map(map) do
     for {key, value} <- map, into: %{} do
-      key = case is_bitstring(key) do
-        false -> key
-        true -> case Keyword.get(options, :whitelist) do
-          nil -> String.to_atom(key)
-          whitelist -> case Enum.member?(whitelist, key) do
-            false -> key
-            true -> String.to_atom(key)
-          end
+      key =
+        case is_bitstring(key) do
+          false ->
+            key
+
+          true ->
+            case Keyword.get(options, :whitelist) do
+              nil ->
+                String.to_atom(key)
+
+              whitelist ->
+                case Enum.member?(whitelist, key) do
+                  false -> key
+                  true -> String.to_atom(key)
+                end
+            end
         end
-      end
 
       {key, keys_to_atoms(value, options)}
     end
   end
+
   def keys_to_atoms(value, _), do: value
 end

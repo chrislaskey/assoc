@@ -24,7 +24,7 @@ defmodule Assoc.UpdaterTest do
     record
     |> reload([key])
     |> Map.get(key)
-    |> Enum.map(&(&1.id))
+    |> Enum.map(& &1.id)
   end
 
   defp reload(record, associations) do
@@ -90,7 +90,7 @@ defmodule Assoc.UpdaterTest do
       # Update
 
       params = %{
-        addresses: [],
+        addresses: []
       }
 
       {:ok, user} = Subject.call(user, params)
@@ -467,7 +467,8 @@ defmodule Assoc.UpdaterTest do
 
       # Update
 
-      user_roles = user
+      user_roles =
+        user
         |> reload([:user_roles])
         |> Map.get(:user_roles)
 

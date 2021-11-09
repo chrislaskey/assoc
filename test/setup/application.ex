@@ -6,7 +6,7 @@ defmodule Assoc.Test.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      supervisor(Assoc.Test.Repo, [])
+      {Assoc.Test.Repo, []}
     ]
 
     opts = [strategy: :one_for_one]

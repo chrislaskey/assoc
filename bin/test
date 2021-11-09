@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -a && source .env && set +a
+
+# sudo docker run --name assoc-test -e POSTGRES_PASSWORD=$ASSOC_TEST_POSTGRES_PASS -p 5432:5432 -d postgres
+
+result=$(set -a && source .env && set +a && mix test)
+
+# sudo docker stop assoc-test
+# sudo docker rm assoc-test
+
+# echo $result

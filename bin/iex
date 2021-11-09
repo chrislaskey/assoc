@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+MIX_ENV=test set -a && source .env && set +a && iex -S mix

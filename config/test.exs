@@ -18,4 +18,5 @@ config :assoc, Assoc.Test.Repo,
   password: System.get_env("ASSOC_TEST_POSTGRES_PASS"),
   database: System.get_env("ASSOC_TEST_POSTGRES_DB"),
   hostname: System.get_env("ASSOC_TEST_POSTGRES_HOST"),
+  port: System.get_env("ASSOC_TEST_POSTGRES_PORT"),
   pool: Ecto.Adapters.SQL.Sandbox

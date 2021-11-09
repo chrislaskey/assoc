@@ -4,7 +4,7 @@ defmodule Assoc.Test.Factories do
   alias Assoc.Test.Role
   alias Assoc.Test.Tag
   alias Assoc.Test.User
-  
+
   # Factories
 
   def insert_address!(params \\ %{}) do
@@ -16,7 +16,7 @@ defmodule Assoc.Test.Factories do
 
     %Address{}
     |> Address.changeset(params)
-    |> Repo.insert!
+    |> Repo.insert!()
   end
 
   def insert_tag!(params \\ %{}) do
@@ -28,7 +28,7 @@ defmodule Assoc.Test.Factories do
 
     %Tag{}
     |> Tag.changeset(params)
-    |> Repo.insert!
+    |> Repo.insert!()
   end
 
   def insert_role!(params \\ %{}) do
@@ -40,7 +40,7 @@ defmodule Assoc.Test.Factories do
 
     %Role{}
     |> Role.changeset(params)
-    |> Repo.insert!
+    |> Repo.insert!()
   end
 
   def insert_user!(params \\ %{}) do
@@ -52,6 +52,6 @@ defmodule Assoc.Test.Factories do
 
     %User{}
     |> User.changeset(params)
-    |> Repo.insert!
+    |> Repo.insert!()
   end
 end

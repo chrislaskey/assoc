@@ -38,7 +38,7 @@ defmodule Assoc.Schema do
     - The library will create and use a separate `associations_changeset` to manage the associations
   """
 
-  @callback updatable_associations :: List.t
+  @callback updatable_associations :: List.t()
 
   defmacro __using__(repo: repo) do
     quote do
@@ -57,11 +57,12 @@ defmodule Assoc.Schema do
       feeds the list into `Repo.preload`.
       """
       def preload_all(struct) do
-        keys = struct
-          |> Map.from_struct
-          |> Enum.reduce([], fn ({key, value}, acc) ->
+        keys =
+          struct
+          |> Map.from_struct()
+          |> Enum.reduce([], fn {key, value}, acc ->
             case value do
-              %Ecto.Association.NotLoaded{} -> [key|acc]
+              %Ecto.Association.NotLoaded{} -> [key | acc]
               _ -> acc
             end
           end)
@@ -85,10 +86,11 @@ defmodule Assoc.Schema do
       Preload selected schema associations.
       """
       def preload_associations(struct, associations) do
-        associations = case Keyword.keyword?(associations) do
-          true -> Keyword.keys(associations)
-          false -> associations
-        end
+        associations =
+          case Keyword.keyword?(associations) do
+            true -> Keyword.keys(associations)
+            false -> associations
+          end
 
         unquote(repo).preload(struct, associations)
       end
@@ -96,14 +98,15 @@ defmodule Assoc.Schema do
       # Include existing associations in params by merging params into preload struct
       defp include_existing_associations(struct, params) do
         struct
-        |> Map.from_struct
+        |> Map.from_struct()
         |> Map.merge(params)
       end
 
       # Dynamically adds `put_assoc` calls to changeset
       defp put_associations(changeset, associations, params) do
-        Enum.reduce(associations, changeset, fn ({key, _}, acc) ->
-          value = params
+        Enum.reduce(associations, changeset, fn {key, _}, acc ->
+          value =
+            params
             |> Assoc.Util.keys_to_atoms()
             |> Map.get(key, :omitted)
 
