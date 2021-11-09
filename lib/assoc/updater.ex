@@ -45,7 +45,7 @@ defmodule Assoc.Updater do
   Create and update associated records.
   """
   @spec update_associations(map(), struct() | {:ok, struct()}, map()) ::
-          {:ok, Map.t()} | {:error, String.t()}
+          {:ok, map()} | {:error, String.t()}
   def update_associations(repo, {:ok, parent}, params),
     do: update_associations(repo, parent, params)
 
