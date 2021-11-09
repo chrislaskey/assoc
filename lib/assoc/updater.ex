@@ -50,8 +50,10 @@ defmodule Assoc.Updater do
     do: update_associations(repo, parent, params)
 
   def update_associations(repo, %_{} = parent, params) do
+    struct = Map.get(parent, :__struct__)
+
     associations =
-      Enum.reduce(parent.__struct__.updatable_associations, %{}, fn {association_key, association_schema},
+      Enum.reduce(struct.updatable_associations, %{}, fn {association_key, association_schema},
                                                          acc ->
         association_params =
           params
@@ -66,7 +68,7 @@ defmodule Assoc.Updater do
       end)
 
     parent
-    |> parent.__struct__.associations_changeset(associations)
+    |> struct.associations_changeset(associations)
     |> repo.update
   end
 
