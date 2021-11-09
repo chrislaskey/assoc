@@ -38,7 +38,7 @@ defmodule Assoc.Schema do
     - The library will create and use a separate `associations_changeset` to manage the associations
   """
 
-  @callback updatable_associations :: List.t()
+  @callback updatable_associations :: list()
 
   defmacro __using__(repo: repo) do
     quote do
